@@ -117,6 +117,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 2.5rem;height:72px
 .stat-item{text-align:center}
 .stat-label{font-size:.8rem;letter-spacing:.1em;color:rgba(240,240,240,.4);text-transform:uppercase;margin-top:.5rem}
 
+/* Transitions for details fading */
+.reel-details {
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.web-card > div.mt-5 {
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
 /* CLIENT SUCCESS REELS */
 .reels-container {
   display: flex;
@@ -318,6 +326,17 @@ footer .footer-grid{
     opacity: 0;
     z-index: 1;
     pointer-events: none;
+  }
+  /* Hide details on non-active stacked reels cards */
+  .reel-card:not(.stack-active) .reel-details {
+    opacity: 0 !important;
+    transform: translateY(10px) !important;
+    pointer-events: none !important;
+  }
+  .reel-card.stack-active .reel-details {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
   }
 
   /* Footer — compact mobile */
@@ -612,6 +631,9 @@ footer .footer-grid{
     transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
     margin: 0;
     width: 280px;
+    background: #0b0f19 !important; /* solid opaque background to prevent bleed-through */
+    border: 1px solid rgba(99, 102, 241, 0.2) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
     backdrop-filter: blur(20px);
   }
   .web-card.stack-active {
@@ -637,6 +659,17 @@ footer .footer-grid{
     opacity: 0;
     z-index: 1;
     pointer-events: none;
+  }
+  /* Hide details on non-active stacked web cards */
+  .web-card:not(.stack-active) > div.mt-5 {
+    opacity: 0 !important;
+    transform: translateY(10px) !important;
+    pointer-events: none !important;
+  }
+  .web-card.stack-active > div.mt-5 {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
   }
   .browser-screen {
     height: 220px;
