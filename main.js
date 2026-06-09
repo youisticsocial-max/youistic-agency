@@ -1215,7 +1215,7 @@ function initReelsStack() {
     if (!isMobile) {
       // Clear all stack classes on desktop
       cards.forEach(card => {
-        card.classList.remove('stack-active', 'stack-behind-1', 'stack-behind-2', 'stack-hidden');
+        card.classList.remove('stack-active', 'stack-behind-1', 'stack-behind-2', 'stack-prev');
       });
       return;
     }
@@ -1224,16 +1224,16 @@ function initReelsStack() {
     cards.forEach((card, idx) => {
       const relIdx = (idx - activeIndex + cards.length) % cards.length;
 
-      card.classList.remove('stack-active', 'stack-behind-1', 'stack-behind-2', 'stack-hidden');
+      card.classList.remove('stack-active', 'stack-behind-1', 'stack-behind-2', 'stack-prev');
       
       if (relIdx === 0) {
         card.classList.add('stack-active');
       } else if (relIdx === 1) {
         card.classList.add('stack-behind-1');
-      } else if (relIdx === 2) {
-        card.classList.add('stack-behind-2');
+      } else if (relIdx === cards.length - 1) {
+        card.classList.add('stack-prev');
       } else {
-        card.classList.add('stack-hidden');
+        card.classList.add('stack-behind-2');
       }
     });
   }
