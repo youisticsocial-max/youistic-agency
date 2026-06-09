@@ -273,8 +273,52 @@ footer .footer-grid{
   #case-studies-track{flex-direction:column;padding:0 1.25rem;width:100%}
   .case-card{width:100%!important}
 
-  /* Reels */
-  .reel-card{width:240px;height:426px}
+  /* Reels Stack Mode */
+  .reels-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: visible;
+    height: 466px;
+    padding: 0;
+  }
+  .reel-card {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0) scale(1);
+    transform-origin: bottom center;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
+    margin: 0;
+    scroll-snap-align: none;
+    width: 240px;
+    height: 426px;
+  }
+  .reel-card.stack-active {
+    transform: translate3d(-50%, 0, 0) scale(1);
+    opacity: 1;
+    z-index: 10;
+    pointer-events: auto;
+  }
+  .reel-card.stack-behind-1 {
+    transform: translate3d(-50%, 16px, -20px) scale(0.92);
+    opacity: 0.8;
+    z-index: 9;
+    pointer-events: none;
+  }
+  .reel-card.stack-behind-2 {
+    transform: translate3d(-50%, 32px, -40px) scale(0.84);
+    opacity: 0.5;
+    z-index: 8;
+    pointer-events: none;
+  }
+  .reel-card.stack-hidden {
+    transform: translate3d(-50%, -60px, -100px) scale(0.7);
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
 
   /* Footer — compact mobile */
   footer{padding:2.5rem 1.25rem 1.5rem}
@@ -296,7 +340,13 @@ footer .footer-grid{
 @media(max-width:480px){
   .hero-title-line{font-size:2.25rem!important}
   .stats-grid{grid-template-columns:1fr}
-  .reel-card{width:85vw;height:calc(85vw * 16 / 9)}
+  .reels-container {
+    height: calc(85vw * 16 / 9 + 40px);
+  }
+  .reel-card {
+    width: 85vw;
+    height: calc(85vw * 16 / 9);
+  }
   footer .flex.gap-6{gap:1rem;flex-wrap:wrap;justify-content:center}
 }
 

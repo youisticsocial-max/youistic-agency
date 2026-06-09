@@ -1197,3 +1197,121 @@ if (grid) {
     }
   });
 }
+
+
+// ── Stacked Reels Carousel for Mobile ───────────────────────────────────────
+function initReelsStack() {
+  const container = document.querySelector('.reels-container');
+  if (!container) return;
+  const cards = Array.from(container.querySelectorAll('.reel-card'));
+  if (cards.length === 0) return;
+
+  let activeIndex = 0;
+  let intervalId = null;
+
+  function updateStack() {
+    const isMobile = window.innerWidth <= 768;
+    
+    if (!isMobile) {
+      // Clear all stack classes on desktop
+      cards.forEach(card => {
+        card.classList.remove('stack-active', 'stack-behind-1', 'stack-behind-2', 'stack-hidden');
+      });
+      return;
+    }
+
+    // Apply classes for mobile stack
+    cards.forEach((card, idx) => {
+      const relIdx = (idx - activeIndex + cards.length) % cards.length;
+
+      card.classList.remove('stack-active', 'stack-behind-1', 'stack-behind-2', 'stack-hidden');
+      
+      if (relIdx === 0) {
+        card.classList.add('stack-active');
+      } else if (relIdx === 1) {
+        card.classList.add('stack-behind-1');
+      } else if (relIdx === 2) {
+        card.classList.add('stack-behind-2');
+      } else {
+        card.classList.add('stack-hidden');
+      }
+    });
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    intervalId = setInterval(() => {
+      if (window.innerWidth <= 768) {
+        activeIndex = (activeIndex + 1) % cards.length;
+        updateStack();
+      }
+    }, 5000);
+  }
+
+  function stopAutoplay() {
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+  }
+
+  // Swipe gesture support on mobile
+  let startX = 0;
+  let startY = 0;
+  container.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', e => {
+    if (window.innerWidth > 768) return;
+    const diffX = e.changedTouches[0].clientX - startX;
+    const diffY = e.changedTouches[0].clientY - startY;
+    
+    // Only trigger if horizontal swipe is larger than vertical scroll
+    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 0) {
+        // Swipe right -> previous card
+        activeIndex = (activeIndex - 1 + cards.length) % cards.length;
+      } else {
+        // Swipe left -> next card
+        activeIndex = (activeIndex + 1) % cards.length;
+      }
+      updateStack();
+      startAutoplay(); // Reset timer
+    }
+  }, { passive: true });
+
+  // Handle click on behind cards to switch to them
+  cards.forEach((card, idx) => {
+    card.addEventListener('click', (e) => {
+      if (window.innerWidth > 768) return;
+      if (idx !== activeIndex) {
+        e.preventDefault();
+        e.stopPropagation();
+        activeIndex = idx;
+        updateStack();
+        startAutoplay(); // Reset timer
+      }
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    updateStack();
+    if (window.innerWidth <= 768) {
+      if (!intervalId) startAutoplay();
+    } else {
+      stopAutoplay();
+    }
+  });
+
+  // Init
+  updateStack();
+  if (window.innerWidth <= 768) {
+    startAutoplay();
+  }
+}
+
+// Initialize the stacked reels
+initReelsStack();
+
