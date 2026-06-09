@@ -84,10 +84,6 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
           Page &amp; Hero Content
         </button>
-        <button onclick="switchTab('media')" class="tab-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-left text-sm font-semibold transition-all duration-300" id="tab-media-btn">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a2 2 0 002-2V6a2 2 0 00-2-2H4a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          Reel Media Links
-        </button>
         <button onclick="switchTab('contacts')" class="tab-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-left text-sm font-semibold transition-all duration-300" id="tab-contacts-btn">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
           Contacts &amp; Socials
@@ -191,38 +187,6 @@
             </div>
             <button type="submit" class="px-6 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all duration-300">
               Save Content Config
-            </button>
-          </form>
-        </section>
-
-        <!-- =================== TAB: MEDIA MANAGER =================== -->
-        <section id="tab-media" class="tab-panel hidden space-y-8">
-          <div>
-            <h2 class="text-3xl font-bold font-syne text-white">Reel Media Video Manager</h2>
-            <p class="text-slate-400 text-sm mt-1">Manage the video resources displayed inside homepage success stories cards</p>
-          </div>
-
-          <form id="form-media" class="space-y-6 max-w-3xl">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label class="block text-slate-400 text-sm mb-2 font-medium font-syne">Success Reel 1 Video Path</label>
-                <input type="text" id="config-video1" placeholder="/media/Reels (1)_optimized.mp4" class="w-full px-4 py-3 bg-white/5 border border-indigo-500/15 rounded-xl text-white focus:outline-none focus:border-indigo-500/50" />
-              </div>
-              <div>
-                <label class="block text-slate-400 text-sm mb-2 font-medium font-syne">Success Reel 2 Video Path</label>
-                <input type="text" id="config-video2" placeholder="/media/Reels (2)_optimized.mp4" class="w-full px-4 py-3 bg-white/5 border border-indigo-500/15 rounded-xl text-white focus:outline-none focus:border-indigo-500/50" />
-              </div>
-              <div>
-                <label class="block text-slate-400 text-sm mb-2 font-medium font-syne">Success Reel 3 Video Path</label>
-                <input type="text" id="config-video3" placeholder="/media/Reels (4)_optimized.mp4" class="w-full px-4 py-3 bg-white/5 border border-indigo-500/15 rounded-xl text-white focus:outline-none focus:border-indigo-500/50" />
-              </div>
-              <div>
-                <label class="block text-slate-400 text-sm mb-2 font-medium font-syne">Success Reel 4 Video Path</label>
-                <input type="text" id="config-video4" placeholder="/media/Reels (5)_optimized.mp4" class="w-full px-4 py-3 bg-white/5 border border-indigo-500/15 rounded-xl text-white focus:outline-none focus:border-indigo-500/50" />
-              </div>
-            </div>
-            <button type="submit" class="px-6 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all duration-300">
-              Save Video Config
             </button>
           </form>
         </section>
@@ -736,16 +700,7 @@
       saveStoredConfig(updates);
     });
 
-    document.getElementById('form-media').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const fields = ['video1', 'video2', 'video3', 'video4'];
-      const updates = {};
-      fields.forEach(field => {
-        const val = document.getElementById('config-' + field).value;
-        if (val.trim() !== '') updates[field] = val;
-      });
-      saveStoredConfig(updates);
-    });
+
 
     document.getElementById('form-contacts').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -765,7 +720,6 @@
       // Populate form fields
       const allFields = [
         'heroTitle1', 'heroTitle2', 'heroSub', 'logoUrl',
-        'video1', 'video2', 'video3', 'video4',
         'email', 'phone', 'address', 'instagram', 'twitter', 'linkedin', 'youtube'
       ];
       allFields.forEach(field => {
