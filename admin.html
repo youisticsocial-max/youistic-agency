@@ -40,7 +40,6 @@
         <div>
           <label class="block text-slate-400 text-xs uppercase tracking-wider mb-2 font-semibold">Security Password</label>
           <input type="password" id="admin-password" placeholder="••••••••" class="w-full px-5 py-4 bg-white/5 border border-indigo-500/20 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/60 transition-all duration-300" required />
-          <p class="text-slate-500 text-xs mt-2">Hint: Use <span class="text-indigo-400 font-mono">admin123</span></p>
         </div>
         <div id="login-error" class="hidden text-rose-400 text-sm text-center font-medium bg-rose-500/10 border border-rose-500/20 py-2.5 rounded-xl">
           Incorrect security key. Please try again.
@@ -643,6 +642,28 @@
 
   <!-- DASHBOARD CONTROL SCRIPTS -->
   <script>
+    // Safe LocalStorage wrapper for mobile private browsing mode
+    try {
+      const testKey = '__storage_test__';
+      window.localStorage.setItem(testKey, testKey);
+      window.localStorage.removeItem(testKey);
+    } catch (e) {
+      console.warn('LocalStorage is disabled or private mode is active.');
+      const originalSetItem = window.localStorage.setItem;
+      window.localStorage.setItem = function(key, value) {
+        try {
+          originalSetItem.call(window.localStorage, key, value);
+        } catch (err) {
+          console.error('LocalStorage write blocked:', err);
+          if (typeof showToast === 'function') {
+            showToast('⚠️ Save failed! Please disable Private Browsing mode.');
+          } else {
+            alert('⚠️ Save failed! Please disable Private Browsing mode.');
+          }
+        }
+      };
+    }
+
     // Utility for escaping HTML strings
     function escapeHtml(str) {
       if (!str) return '';
@@ -707,7 +728,7 @@
       const pw = document.getElementById('admin-password').value;
       const errorMsg = document.getElementById('login-error');
       
-      if (pw === 'admin123') {
+      if (pw === '@Youearn42') {
         sessionStorage.setItem('youistic_admin_auth', 'true');
         document.getElementById('login-container').classList.add('hidden');
         document.getElementById('dashboard-container').classList.remove('hidden');
