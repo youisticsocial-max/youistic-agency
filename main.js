@@ -2,8 +2,7 @@
 function applySavedConfig() {
   try {
     const saved = localStorage.getItem('youistic_site_config');
-    if (!saved) return;
-    const config = JSON.parse(saved);
+    const config = saved ? JSON.parse(saved) : {};
     
     // Logo replacement
     if (config.logoUrl) {
@@ -12,21 +11,53 @@ function applySavedConfig() {
       });
     }
     
-    // Video links replacement
-    const customVideos = [config.video1, config.video2, config.video3, config.video4];
-    document.querySelectorAll('.reel-card video').forEach((video, index) => {
-      const customUrl = customVideos[index];
-      if (customUrl) {
-        const source = video.querySelector('source');
-        if (source) {
-          if (!source.src.endsWith(customUrl)) {
-            source.src = customUrl;
-            video.load();
-            video.play().catch(err => console.log('Autoplay interrupted:', err));
-          }
-        }
+    // Success Reels dynamic injection
+    const defaultReels = [
+      {
+        title: "FinTech Scaleup",
+        subtitle: "99.99% Uptime",
+        video: "/media/Reels (1)_optimized.mp4"
+      },
+      {
+        title: "E-Commerce Brand",
+        subtitle: "Load Time < 0.6s",
+        video: "/media/Reels (2)_optimized.mp4"
+      },
+      {
+        title: "AI Support Agent",
+        subtitle: "+140% Conversions",
+        video: "/media/Reels (4)_optimized.mp4"
+      },
+      {
+        title: "Logistics Workflow",
+        subtitle: "450+ Hours Saved",
+        video: "/media/Reels (5)_optimized.mp4"
       }
-    });
+    ];
+    
+    const reelsContainer = document.querySelector('.reels-container');
+    if (reelsContainer) {
+      const reelsList = config.successReels || defaultReels;
+      reelsContainer.innerHTML = reelsList.map(reel => `
+        <div class="reel-card magnetic snap-center flex-shrink-0" data-tilt>
+          <video
+            class="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity duration-500 rounded-3xl"
+            loop muted autoplay playsinline>
+            <source src="${reel.video}" type="video/mp4">
+          </video>
+          <div class="reel-glow"></div>
+          <div class="play-overlay">
+            <svg class="w-12 h-12 text-white/50 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+          <div class="reel-details">
+            <div class="text-white font-bold text-lg">${reel.title}</div>
+            <div class="text-indigo-400 text-sm font-semibold mt-1">${reel.subtitle}</div>
+          </div>
+        </div>
+      `).join('\n');
+    }
     
     // Contacts
     if (config.email) {

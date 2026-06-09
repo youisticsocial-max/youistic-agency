@@ -96,6 +96,10 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
           Websites Showcase
         </button>
+        <button onclick="switchTab('reels')" class="tab-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-left text-sm font-semibold transition-all duration-300" id="tab-reels-btn">
+          <svg class="w-5 h-5 opacity-60" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          Success Reels
+        </button>
         <button onclick="switchTab('prompts')" class="tab-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-left text-sm font-semibold transition-all duration-300" id="tab-prompts-btn">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
           Prompts Library
@@ -265,6 +269,35 @@
                 </tr>
               </thead>
               <tbody id="showcase-table-body" class="divide-y divide-indigo-500/10">
+                <!-- Dynamic rows -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- =================== TAB: SUCCESS REELS SHOWCASE =================== -->
+        <section id="tab-reels" class="tab-panel hidden space-y-6">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h2 class="text-3xl font-bold font-syne text-white">Success Reels Showcase</h2>
+              <p class="text-slate-400 text-sm mt-1">Manage client success reels shown on the homepage</p>
+            </div>
+            <button onclick="openAddReelModal()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-all duration-300 flex items-center gap-2">
+              + Add New Reel
+            </button>
+          </div>
+
+          <!-- Reels Table List -->
+          <div class="border border-indigo-500/10 rounded-2xl overflow-hidden bg-white/[0.005] overflow-x-auto">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr class="border-b border-indigo-500/10 bg-indigo-500/5 text-slate-400 uppercase tracking-wider text-xs">
+                  <th class="px-6 py-4 font-semibold">Reel Details</th>
+                  <th class="px-6 py-4 font-semibold">Video Path / URL</th>
+                  <th class="px-6 py-4 font-semibold text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="reels-table-body" class="divide-y divide-indigo-500/10">
                 <!-- Dynamic rows -->
               </tbody>
             </table>
@@ -449,6 +482,35 @@
     </div>
   </div>
 
+  <!-- ADD/EDIT REEL MODAL -->
+  <div id="reel-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#030712]/90 backdrop-blur-md hidden">
+    <div class="w-full max-w-lg p-8 bg-[#090f1d] border border-indigo-500/15 rounded-3xl backdrop-blur-xl shadow-2xl relative">
+      <button onclick="closeReelModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <h3 id="reel-modal-title" class="text-xl font-bold font-syne text-white mb-6">Add Success Reel</h3>
+      
+      <form id="reel-form" class="space-y-5">
+        <input type="hidden" id="reel-index" value="" />
+        <div>
+          <label class="block text-slate-400 text-xs uppercase tracking-wider mb-2 font-semibold">Reel Title</label>
+          <input type="text" id="reel-title" placeholder="FinTech Scaleup" class="w-full px-4 py-3 bg-white/5 border border-indigo-500/15 rounded-xl text-white focus:outline-none focus:border-indigo-500/50 text-sm" required />
+        </div>
+        <div>
+          <label class="block text-slate-400 text-xs uppercase tracking-wider mb-2 font-semibold">Reel Subtitle (Metric)</label>
+          <input type="text" id="reel-subtitle" placeholder="99.99% Uptime" class="w-full px-4 py-3 bg-white/5 border border-indigo-500/15 rounded-xl text-white focus:outline-none focus:border-indigo-500/50 text-sm" required />
+        </div>
+        <div>
+          <label class="block text-slate-400 text-xs uppercase tracking-wider mb-2 font-semibold">Video Path / URL</label>
+          <input type="text" id="reel-video" placeholder="/media/Reels (1)_optimized.mp4" class="w-full px-4 py-3 bg-white/5 border border-indigo-500/15 rounded-xl text-white focus:outline-none focus:border-indigo-500/50 text-sm" required />
+        </div>
+        <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all duration-300">
+          Save Success Reel
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- ADD/EDIT PROMPT MODAL -->
   <div id="prompt-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#030712]/90 backdrop-blur-md hidden">
     <div class="w-full max-w-lg p-8 bg-[#090f1d] border border-indigo-500/15 rounded-3xl backdrop-blur-xl shadow-2xl relative">
@@ -581,6 +643,17 @@
 
   <!-- DASHBOARD CONTROL SCRIPTS -->
   <script>
+    // Utility for escaping HTML strings
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     // Tab switching controller
     function switchTab(tabId) {
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
@@ -705,6 +778,7 @@
       renderPlannerTable();
       renderQuickTable();
       renderShowcaseTable();
+      renderReelsTable();
       renderPromptsGrid();
     }
 
@@ -1033,6 +1107,131 @@
         localStorage.setItem('youistic_site_config', JSON.stringify(config));
         renderShowcaseTable();
         showToast('Website showcase item deleted.');
+      }
+    }
+
+    // Success Reels dynamic management
+    const defaultReels = [
+      {
+        title: "FinTech Scaleup",
+        subtitle: "99.99% Uptime",
+        video: "/media/Reels (1)_optimized.mp4"
+      },
+      {
+        title: "E-Commerce Brand",
+        subtitle: "Load Time < 0.6s",
+        video: "/media/Reels (2)_optimized.mp4"
+      },
+      {
+        title: "AI Support Agent",
+        subtitle: "+140% Conversions",
+        video: "/media/Reels (4)_optimized.mp4"
+      },
+      {
+        title: "Logistics Workflow",
+        subtitle: "450+ Hours Saved",
+        video: "/media/Reels (5)_optimized.mp4"
+      }
+    ];
+
+    let reelsList = [];
+
+    function renderReelsTable() {
+      const config = getStoredConfig();
+      if (!config.successReels) {
+        config.successReels = [...defaultReels];
+        localStorage.setItem('youistic_site_config', JSON.stringify(config));
+      }
+      reelsList = config.successReels;
+
+      const tbody = document.getElementById('reels-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      reelsList.forEach((item, index) => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-white/[0.01] transition-all duration-200';
+        row.innerHTML = `
+          <td class="px-6 py-4">
+            <div class="font-bold text-white">${escapeHtml(item.title)}</div>
+            <div class="text-xs text-indigo-400 font-mono mt-0.5">${escapeHtml(item.subtitle)}</div>
+          </td>
+          <td class="px-6 py-4 text-xs text-slate-400 font-mono select-all">
+            ${escapeHtml(item.video)}
+          </td>
+          <td class="px-6 py-4 text-center space-x-2">
+            <button onclick="openEditReelModal(${index})" class="px-3 py-1.5 bg-indigo-500/10 hover:bg-indigo-500 text-indigo-300 hover:text-white rounded-lg border border-indigo-500/20 text-xs font-semibold transition-all duration-200">
+              Edit
+            </button>
+            <button onclick="deleteReel(${index})" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-lg border border-rose-500/20 text-xs font-semibold transition-all duration-200">
+              Delete
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function openAddReelModal() {
+      document.getElementById('reel-modal-title').textContent = "Add Success Reel";
+      document.getElementById('reel-form').reset();
+      document.getElementById('reel-index').value = "";
+      document.getElementById('reel-modal').classList.remove('hidden');
+    }
+
+    function openEditReelModal(index) {
+      const item = reelsList[index];
+      if (!item) return;
+      document.getElementById('reel-modal-title').textContent = "Edit Success Reel";
+      document.getElementById('reel-index').value = index;
+      
+      document.getElementById('reel-title').value = item.title;
+      document.getElementById('reel-subtitle').value = item.subtitle;
+      document.getElementById('reel-video').value = item.video;
+
+      document.getElementById('reel-modal').classList.remove('hidden');
+    }
+
+    function closeReelModal() {
+      document.getElementById('reel-modal').classList.add('hidden');
+    }
+
+    document.getElementById('reel-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const index = document.getElementById('reel-index').value;
+      const title = document.getElementById('reel-title').value.trim();
+      const subtitle = document.getElementById('reel-subtitle').value.trim();
+      const video = document.getElementById('reel-video').value.trim();
+
+      const reelData = { title, subtitle, video };
+
+      const config = getStoredConfig();
+      if (!config.successReels) {
+        config.successReels = [...defaultReels];
+      }
+
+      if (index === "") {
+        config.successReels.push(reelData);
+      } else {
+        config.successReels[parseInt(index)] = reelData;
+      }
+
+      localStorage.setItem('youistic_site_config', JSON.stringify(config));
+      closeReelModal();
+      renderReelsTable();
+      showToast('Success Reel saved successfully!');
+    });
+
+    function deleteReel(index) {
+      if (!confirm('Are you sure you want to remove this Success Reel?')) return;
+      
+      const config = getStoredConfig();
+      if (config.successReels) {
+        config.successReels.splice(index, 1);
+        localStorage.setItem('youistic_site_config', JSON.stringify(config));
+        renderReelsTable();
+        showToast('Success Reel deleted.');
       }
     }
 
