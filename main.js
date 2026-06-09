@@ -143,7 +143,6 @@ function applySavedConfig() {
   }
 }
 applySavedConfig();
-document.addEventListener('DOMContentLoaded', applySavedConfig);
 // -------------------------
 
 // ── Hamburger Mobile Menu ─────────────────────────────────────────────────────
