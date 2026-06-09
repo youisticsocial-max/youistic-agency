@@ -252,7 +252,7 @@ footer .footer-grid{
   .nav-links{display:none}
   #nav-cta{display:none}
   .nav-hamburger{display:flex}
-  .nav-logo{transform:translateY(6px)}
+  .nav-logo{transform:translateY(6px);margin-right:auto}
 
   /* Hero */
   #hero{padding:7rem 1.25rem 3rem}
