@@ -576,6 +576,25 @@ footer .footer-grid{
     transform: translateY(0) !important;
     pointer-events: auto !important;
   }
+  /* Restructure details layout for mobile to prevent overflow */
+  .web-card > div.mt-5 {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+  .web-card > div.mt-5 p {
+    flex-wrap: wrap !important;
+    gap: 0.375rem !important;
+  }
+  .web-card > div.mt-5 a {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 0.625rem 1rem !important;
+    background: rgba(99, 102, 241, 0.1) !important;
+    border-color: rgba(99, 102, 241, 0.35) !important;
+    color: #fff !important;
+    transition: all 0.3s ease !important;
+  }
   .browser-screen {
     height: 220px;
   }
