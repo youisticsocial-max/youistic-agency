@@ -88,7 +88,8 @@
         },
       };
       try {
-        const resp = await fetch(BACKEND_URL, {
+        const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(BACKEND_URL);
+        const resp = await fetch(proxyUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
