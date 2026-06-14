@@ -12,7 +12,8 @@ export default defineConfig({
         growth: resolve(__dirname, 'growth.html'),
         contact: resolve(__dirname, 'contact.html'),
         start: resolve(__dirname, 'start.html'),
-        admin: resolve(__dirname, 'admin.html')
+        admin: resolve(__dirname, 'admin.html'),
+        builder: resolve(__dirname, 'builder.html')
       }
     }
   }
