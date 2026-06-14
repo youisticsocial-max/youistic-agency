@@ -132,6 +132,11 @@
               Project Planners
               <span id="planner-count" class="ml-auto bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
             </button>
+            <button onclick="switchTab('referrals')" class="tab-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-left text-sm font-semibold transition-all duration-300" id="tab-referrals-btn">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              Referrals Manager
+              <span id="referrals-count" class="ml-auto bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
+            </button>
             <button onclick="switchTab('quick')" class="tab-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-left text-sm font-semibold transition-all duration-300" id="tab-quick-btn">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
               Quick Messages
@@ -429,6 +434,42 @@
           </div>
         </section>
 
+        <!-- =================== TAB: REFERRALS MANAGER =================== -->
+        <section id="tab-referrals" class="tab-panel hidden space-y-6">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h2 class="text-3xl font-bold font-syne text-white">Referrals Manager</h2>
+              <p class="text-slate-400 text-sm mt-1">Manage partner referrals, discounts, and track commissions</p>
+            </div>
+            <button onclick="openAddReferralModal()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-all duration-300 flex items-center gap-2">
+              + Add New Referral
+            </button>
+          </div>
+
+          <!-- Filters -->
+          <div class="flex gap-4">
+            <input type="text" id="referral-search" oninput="filterReferralTable()" placeholder="Search by name or code..." class="w-full max-w-md px-4 py-3 bg-white/5 border border-indigo-500/15 rounded-xl text-white focus:outline-none focus:border-indigo-500/50 text-sm" />
+          </div>
+
+          <!-- Table Wrapper -->
+          <div class="border border-indigo-500/10 rounded-2xl overflow-hidden bg-white/[0.005] overflow-x-auto">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr class="border-b border-indigo-500/10 bg-indigo-500/5 text-slate-400 uppercase tracking-wider text-xs">
+                  <th class="px-6 py-4 font-semibold">Partner Details</th>
+                  <th class="px-6 py-4 font-semibold">Referral Code</th>
+                  <th class="px-6 py-4 font-semibold">Commission / Discount</th>
+                  <th class="px-6 py-4 font-semibold">Uses</th>
+                  <th class="px-6 py-4 font-semibold text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="referrals-table-body" class="divide-y divide-indigo-500/10">
+                <!-- Dynamic rows -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
       </main>
     </div>
   </div>
@@ -541,6 +582,40 @@
         </div>
         <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all duration-300">
           Save Prompt
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="referral-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#030712]/90 backdrop-blur-md hidden">
+    <div class="w-full max-w-lg mx-4 p-6 sm:p-8 bg-[#090f1d] border border-indigo-500/15 rounded-3xl backdrop-blur-xl shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeReferralModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <h3 id="referral-modal-title" class="text-xl font-bold font-syne text-white mb-6">Add Referral Partner</h3>
+      
+      <form id="referral-form" class="space-y-5">
+        <input type="hidden" id="referral-index" value="" />
+        <div>
+          <label class="block text-slate-400 text-xs uppercase tracking-wider mb-2 font-semibold">Partner Name</label>
+          <input type="text" id="referral-name" placeholder="Eliyas" class="w-full px-4 py-3 bg-white/5 border border-indigo-500/15 rounded-xl text-white focus:outline-none focus:border-indigo-500/50 text-sm" required />
+        </div>
+        <div>
+          <label class="block text-slate-400 text-xs uppercase tracking-wider mb-2 font-semibold">Referral Code</label>
+          <input type="text" id="referral-code" placeholder="Eliyasyaar" class="w-full px-4 py-3 bg-white/5 border border-indigo-500/15 rounded-xl text-white focus:outline-none focus:border-indigo-500/50 text-sm" required />
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-slate-400 text-xs uppercase tracking-wider mb-2 font-semibold">Partner Commission</label>
+            <input type="text" id="referral-commission" placeholder="20%" class="w-full px-4 py-3 bg-white/5 border border-indigo-500/15 rounded-xl text-white focus:outline-none focus:border-indigo-500/50 text-sm" required />
+          </div>
+          <div>
+            <label class="block text-slate-400 text-xs uppercase tracking-wider mb-2 font-semibold">Client Discount</label>
+            <input type="text" id="referral-discount" placeholder="10% or $500" class="w-full px-4 py-3 bg-white/5 border border-indigo-500/15 rounded-xl text-white focus:outline-none focus:border-indigo-500/50 text-sm" required />
+          </div>
+        </div>
+        <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all duration-300">
+          Save Referral
         </button>
       </form>
     </div>
@@ -806,12 +881,33 @@
           el.value = config[field];
         }
       });
+      
+      // Load Referrals
+      const referrals = JSON.parse(localStorage.getItem('youistic_referrals') || '[]');
+      const referralsCount = document.getElementById('referrals-count');
+      if (referralsCount) referralsCount.textContent = referrals.length;
+      
+      // Planners & Quick messages
+      const planners = JSON.parse(localStorage.getItem('youistic_planner_inquiries') || '[]');
+      const quickMsgs = JSON.parse(localStorage.getItem('youistic_quick_inquiries') || '[]');
+      
+      const pCountBadge = document.getElementById('planner-count');
+      const qCountBadge = document.getElementById('quick-count');
+      const pStat = document.getElementById('stat-planner-count');
+      const qStat = document.getElementById('stat-quick-count');
+      
+      if (pCountBadge) pCountBadge.textContent = planners.length;
+      if (pStat) pStat.textContent = planners.length;
+      if (qCountBadge) qCountBadge.textContent = quickMsgs.length;
+      if (qStat) qStat.textContent = quickMsgs.length;
 
-      renderPlannerTable();
-      renderQuickTable();
-      renderShowcaseTable();
-      renderReelsTable();
-      renderPromptsGrid();
+      // Render Tables and Grids
+      renderWebsitesTable(config.portfolioWebsites || []);
+      renderReelsTable(config.successReels || []);
+      renderPromptsGrid(config.promptLibrary || []);
+      renderPlannerTable(planners);
+      renderQuickTable(quickMsgs);
+      renderReferralsTable();
     }
 
     // Default useful prompts templates
@@ -1427,6 +1523,116 @@
         renderQuickTable();
       }
       showToast('Inquiry item removed successfully.');
+    }
+
+    // Render Referrals Table
+    function renderReferralsTable() {
+      const referralsList = JSON.parse(localStorage.getItem('youistic_referrals') || '[]');
+      const tbody = document.getElementById('referrals-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      
+      if (referralsList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-slate-500 italic">No referrals configured yet.</td></tr>`;
+        return;
+      }
+      
+      referralsList.forEach((item, index) => {
+        const useCount = item.count || 0;
+        
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-white/[0.02] transition-colors';
+        row.innerHTML = `
+          <td class="px-6 py-4">
+            <span class="text-white font-bold block">${escapeHtml(item.name)}</span>
+          </td>
+          <td class="px-6 py-4">
+            <span class="text-indigo-400 font-mono bg-indigo-500/10 px-2 py-1 rounded text-xs border border-indigo-500/20">${escapeHtml(item.code)}</span>
+          </td>
+          <td class="px-6 py-4">
+            <div class="text-xs text-slate-300">Commission: <span class="text-emerald-400 font-bold">${escapeHtml(item.commission)}</span></div>
+            <div class="text-xs text-slate-300">Discount: <span class="text-indigo-300 font-bold">${escapeHtml(item.discount)}</span></div>
+          </td>
+          <td class="px-6 py-4">
+            <span class="text-white font-bold text-lg">${useCount}</span> <span class="text-xs text-slate-500">uses</span>
+          </td>
+          <td class="px-6 py-4 text-center">
+            <button onclick="deleteReferral(${index})" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-lg border border-rose-500/20 text-xs font-semibold transition-all duration-200">
+              Remove
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Add Referral Modal Logic
+    function openAddReferralModal() {
+      document.getElementById('referral-form').reset();
+      document.getElementById('referral-modal').classList.remove('hidden');
+    }
+
+    function closeReferralModal() {
+      document.getElementById('referral-modal').classList.add('hidden');
+    }
+
+    const referralForm = document.getElementById('referral-form');
+    if (referralForm) {
+      referralForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('referral-name').value.trim();
+        const code = document.getElementById('referral-code').value.trim();
+        const commission = document.getElementById('referral-commission').value.trim();
+        const discount = document.getElementById('referral-discount').value.trim();
+        
+        const list = JSON.parse(localStorage.getItem('youistic_referrals') || '[]');
+        
+        // Prevent duplicate codes
+        if (list.find(r => r.code.toLowerCase() === code.toLowerCase())) {
+           showToast('Error: Referral code must be unique!');
+           return;
+        }
+
+        list.push({ name, code, commission, discount, count: 0 });
+        localStorage.setItem('youistic_referrals', JSON.stringify(list));
+        
+        renderReferralsTable();
+        
+        // Update count badge
+        const referralsCount = document.getElementById('referrals-count');
+        if (referralsCount) referralsCount.textContent = list.length;
+        
+        closeReferralModal();
+        showToast('Referral partner added successfully!');
+      });
+    }
+
+    function deleteReferral(index) {
+      if (!confirm('Are you sure you want to remove this referral partner?')) return;
+      
+      const list = JSON.parse(localStorage.getItem('youistic_referrals') || '[]');
+      list.splice(index, 1);
+      localStorage.setItem('youistic_referrals', JSON.stringify(list));
+      
+      renderReferralsTable();
+      
+      const referralsCount = document.getElementById('referrals-count');
+      if (referralsCount) referralsCount.textContent = list.length;
+      
+      showToast('Referral removed.');
+    }
+
+    function filterReferralTable() {
+      const q = document.getElementById('referral-search').value.toLowerCase();
+      const rows = document.querySelectorAll('#referrals-table-body tr');
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(q)) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
     }
 
     // Search filters

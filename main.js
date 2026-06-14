@@ -872,6 +872,29 @@ function initMultiStepForm() {
       }
     }
 
+    if (step === 5) {
+      const refInput = document.getElementById('client-referral-code');
+      const statusDiv = document.getElementById('referral-status');
+      if (refInput && refInput.value.trim() !== '') {
+         const code = refInput.value.trim();
+         const referrals = JSON.parse(localStorage.getItem('youistic_referrals') || '[]');
+         const found = referrals.find(r => r.code === code);
+         
+         statusDiv.classList.remove('hidden');
+         if (found) {
+            statusDiv.textContent = `Valid Referral! ${found.discount} discount will be applied.`;
+            statusDiv.className = 'text-xs font-semibold mt-2 text-emerald-400';
+         } else {
+            statusDiv.textContent = `Invalid Referral Code`;
+            statusDiv.className = 'text-xs font-semibold mt-2 text-rose-400';
+            refInput.classList.add('input-error');
+            valid = false;
+         }
+      } else if (statusDiv) {
+         statusDiv.classList.add('hidden');
+      }
+    }
+
     if (!valid) {
       form.classList.remove('validation-shake');
       void form.offsetWidth; // Reflow
@@ -1038,6 +1061,31 @@ function initMultiStepForm() {
   renderScopingStep('Web Dev');
   showStep(1);
 
+  // Referral input live validation
+  const refInput = document.getElementById('client-referral-code');
+  if (refInput) {
+    refInput.addEventListener('input', () => {
+      const code = refInput.value.trim();
+      const statusDiv = document.getElementById('referral-status');
+      if (code === '') {
+        statusDiv.classList.add('hidden');
+        refInput.classList.remove('input-error');
+        return;
+      }
+      const referrals = JSON.parse(localStorage.getItem('youistic_referrals') || '[]');
+      const found = referrals.find(r => r.code === code);
+      statusDiv.classList.remove('hidden');
+      if (found) {
+        statusDiv.textContent = `Valid Referral! ${found.discount} discount will be applied.`;
+        statusDiv.className = 'text-xs font-semibold mt-2 text-emerald-400';
+        refInput.classList.remove('input-error');
+      } else {
+        statusDiv.textContent = `Invalid Referral Code`;
+        statusDiv.className = 'text-xs font-semibold mt-2 text-rose-400';
+      }
+    });
+  }
+
   // Form submission handler
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -1053,6 +1101,7 @@ function initMultiStepForm() {
     const timeline = document.getElementById('selected-timeline')?.value || '';
     const dynamicDesc = document.getElementById('service-specific-text')?.value || '';
     const extraComments = document.getElementById('client-additional-comments')?.value || '';
+    const referralCode = document.getElementById('client-referral-code')?.value || '';
 
     const selectedFeatures = [];
     document.querySelectorAll('input[name="scoping_features"]:checked').forEach(cb => {
@@ -1078,6 +1127,7 @@ function initMultiStepForm() {
       scopingFeatures: selectedFeatures,
       scopingDesc: dynamicDesc,
       extraComments,
+      referralCode,
       date: new Date().toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
@@ -1086,6 +1136,16 @@ function initMultiStepForm() {
         minute: '2-digit'
       })
     };
+
+    // Update referral usage count
+    if (referralCode.trim() !== '') {
+       let referrals = JSON.parse(localStorage.getItem('youistic_referrals') || '[]');
+       let refIndex = referrals.findIndex(r => r.code === referralCode.trim());
+       if (refIndex !== -1) {
+          referrals[refIndex].count = (referrals[refIndex].count || 0) + 1;
+          localStorage.setItem('youistic_referrals', JSON.stringify(referrals));
+       }
+    }
 
     // Save to localStorage
     const list = JSON.parse(localStorage.getItem('youistic_planner_inquiries') || '[]');
@@ -1111,6 +1171,7 @@ function initMultiStepForm() {
             <div><span class="text-slate-500">Goal:</span> ${goal}</div>
             <div><span class="text-slate-500">Budget:</span> ${budget}</div>
             <div><span class="text-slate-500">Timeline:</span> ${timeline}</div>
+            ${referralCode ? `<div><span class="text-slate-500">Referral:</span> ${referralCode}</div>` : ''}
             ${selectedFeatures.length > 0 ? `<div><span class="text-slate-500">Selected Features:</span> ${selectedFeatures.join(', ')}</div>` : ''}
           </div>
         </div>
