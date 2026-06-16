@@ -54,6 +54,23 @@
       <label for="address">Address (ADDRESS)</label>
       <input type="text" id="address" name="ADDRESS" placeholder="123 Main St, City" required />
 
+      <label for="variant">Design Variant</label>
+      <select id="variant" name="variant" required>
+        <option value="" disabled selected>— Select a variant —</option>
+        <option value="variant-1">variant-1</option>
+        <option value="variant-2">variant-2</option>
+        <option value="variant-3">variant-3</option>
+      </select>
+
+      <label for="serverNumber">Select Active Server</label>
+      <select id="serverNumber" name="serverNumber" required>
+        <option value="" disabled selected>— Select a server —</option>
+        <option value="1">Server 1 (1)</option>
+        <option value="2">Server 2 (2)</option>
+        <option value="3">Server 3 (3)</option>
+        <option value="4">Server 4 (4)</option>
+      </select>
+
       <button type="submit" class="btn btn-primary">Build Preview</button>
     </form>
     <div class="preview-link" id="previewLink" style="display:none;">
@@ -79,6 +96,8 @@
       const data = {
         category: form.category.value,
         clientName: form.clientName.value,
+        variant: form.variant.value,
+        serverNumber: parseInt(form.serverNumber.value, 10),
         fields: {
           CLINIC_NAME: form.clinicName.value,
           LOGO_URL: form.logoUrl.value,
