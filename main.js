@@ -16,22 +16,22 @@ function applySavedConfig() {
       {
         title: "Vishnu Traders",
         subtitle: "Home & life style",
-        video: "/media/Reels (1)_optimized.mp4"
+        video: "/media/reels_1_optimized.mp4"
       },
       {
         title: "Good Health",
         subtitle: "Diagnostic Center",
-        video: "/media/Reels (2)_optimized.mp4"
+        video: "/media/reels_2_optimized.mp4"
       },
       {
         title: "New shop",
         subtitle: "Grocery store",
-        video: "/media/Reels (4)_optimized.mp4"
+        video: "/media/reels_4_optimized.mp4"
       },
       {
         title: "Vijay Restaurant",
         subtitle: "Restaurant",
-        video: "/media/Reels (5)_optimized.mp4"
+        video: "/media/reels_5_optimized.mp4"
       }
     ];
     
@@ -39,8 +39,9 @@ function applySavedConfig() {
     if (reelsContainer) {
       let reelsList = config.successReels || defaultReels;
       
-      // Auto-migrate if old data is cached
-      if (reelsList.length > 0 && reelsList[0].title === "FinTech Scaleup") {
+      // Auto-migrate if old data or old file paths are cached
+      const hasOldPaths = reelsList.some(r => r.video && r.video.includes('Reels ('));
+      if (reelsList.length > 0 && (reelsList[0].title === "FinTech Scaleup" || hasOldPaths)) {
         reelsList = defaultReels;
         config.successReels = defaultReels;
         localStorage.setItem('youistic_site_config', JSON.stringify(config));
