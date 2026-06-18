@@ -902,9 +902,9 @@
       if (qStat) qStat.textContent = quickMsgs.length;
 
       // Render Tables and Grids
-      renderWebsitesTable(config.portfolioWebsites || []);
-      renderReelsTable(config.successReels || []);
-      renderPromptsGrid(config.promptLibrary || []);
+      renderShowcaseTable();
+      renderReelsTable();
+      renderPromptsGrid();
       renderPlannerTable(planners);
       renderQuickTable(quickMsgs);
       renderReferralsTable();
@@ -1063,25 +1063,11 @@
     // Showcase websites default templates
     const defaultWebsites = [
       {
-        title: "Aura Finance",
-        domain: "aurafinance.io",
-        tags: "Next.js, Tailwind, Chart.js",
-        image: "/media/fintech_saas.png",
-        link: "https://aurafinance.io"
-      },
-      {
-        title: "Velour Label",
-        domain: "velourlabel.com",
-        tags: "Next.js, Shopify, GSAP",
-        image: "/media/ecommerce_site.png",
-        link: "https://velourlabel.com"
-      },
-      {
-        title: "Synapse AI",
-        domain: "synapsebot.ai",
-        tags: "React, Three.js, Node",
-        image: "/media/ai_agency.png",
-        link: "https://synapsebot.ai"
+        title: "LawYours",
+        domain: "lawyours.in",
+        tags: "Next.js, Vercel Analytics, Clarity",
+        image: "/media/lawyours.png",
+        link: "https://lawyours.in"
       }
     ];
 
@@ -1089,7 +1075,7 @@
 
     function renderShowcaseTable() {
       const config = getStoredConfig();
-      if (!config.portfolioWebsites) {
+      if (!config.portfolioWebsites || config.portfolioWebsites.length === 0) {
         // Init with default values
         config.portfolioWebsites = [...defaultWebsites];
         localStorage.setItem('youistic_site_config', JSON.stringify(config));
@@ -1241,23 +1227,23 @@
     // Success Reels dynamic management
     const defaultReels = [
       {
-        title: "FinTech Scaleup",
-        subtitle: "99.99% Uptime",
+        title: "Vishnu Traders",
+        subtitle: "Home & life style",
         video: "/media/Reels (1)_optimized.mp4"
       },
       {
-        title: "E-Commerce Brand",
-        subtitle: "Load Time < 0.6s",
+        title: "Good Health",
+        subtitle: "Diagnostic Center",
         video: "/media/Reels (2)_optimized.mp4"
       },
       {
-        title: "AI Support Agent",
-        subtitle: "+140% Conversions",
+        title: "New shop",
+        subtitle: "Grocery store",
         video: "/media/Reels (4)_optimized.mp4"
       },
       {
-        title: "Logistics Workflow",
-        subtitle: "450+ Hours Saved",
+        title: "Vijay Restaurant",
+        subtitle: "Restaurant",
         video: "/media/Reels (5)_optimized.mp4"
       }
     ];
@@ -1266,7 +1252,7 @@
 
     function renderReelsTable() {
       const config = getStoredConfig();
-      if (!config.successReels) {
+      if (!config.successReels || (config.successReels.length > 0 && config.successReels[0].title === "FinTech Scaleup")) {
         config.successReels = [...defaultReels];
         localStorage.setItem('youistic_site_config', JSON.stringify(config));
       }

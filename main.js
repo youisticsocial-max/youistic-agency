@@ -14,30 +14,38 @@ function applySavedConfig() {
     // Success Reels dynamic injection
     const defaultReels = [
       {
-        title: "FinTech Scaleup",
-        subtitle: "99.99% Uptime",
+        title: "Vishnu Traders",
+        subtitle: "Home & life style",
         video: "/media/Reels (1)_optimized.mp4"
       },
       {
-        title: "E-Commerce Brand",
-        subtitle: "Load Time < 0.6s",
+        title: "Good Health",
+        subtitle: "Diagnostic Center",
         video: "/media/Reels (2)_optimized.mp4"
       },
       {
-        title: "AI Support Agent",
-        subtitle: "+140% Conversions",
+        title: "New shop",
+        subtitle: "Grocery store",
         video: "/media/Reels (4)_optimized.mp4"
       },
       {
-        title: "Logistics Workflow",
-        subtitle: "450+ Hours Saved",
+        title: "Vijay Restaurant",
+        subtitle: "Restaurant",
         video: "/media/Reels (5)_optimized.mp4"
       }
     ];
     
     const reelsContainer = document.querySelector('.reels-container');
     if (reelsContainer) {
-      const reelsList = config.successReels || defaultReels;
+      let reelsList = config.successReels || defaultReels;
+      
+      // Auto-migrate if old data is cached
+      if (reelsList.length > 0 && reelsList[0].title === "FinTech Scaleup") {
+        reelsList = defaultReels;
+        config.successReels = defaultReels;
+        localStorage.setItem('youistic_site_config', JSON.stringify(config));
+      }
+
       reelsContainer.innerHTML = reelsList.map(reel => `
         <div class="reel-card magnetic snap-center flex-shrink-0" data-tilt>
           <video

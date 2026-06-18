@@ -408,10 +408,17 @@ footer .footer-grid{
 }
 
 .web-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 2.5rem;
   margin-top: 4rem;
+}
+
+.web-grid .web-card {
+  width: calc(33.333% - 1.67rem);
+  min-width: 300px;
+  max-width: 400px;
 }
 
 .web-card {
@@ -500,9 +507,8 @@ footer .footer-grid{
 
 /* Responsive grid for showcase */
 @media (max-width: 1024px) {
-  .web-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+  .web-grid .web-card {
+    width: calc(50% - 1rem);
   }
 }
 
