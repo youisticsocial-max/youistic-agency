@@ -1075,7 +1075,8 @@
 
     function renderShowcaseTable() {
       const config = getStoredConfig();
-      if (!config.portfolioWebsites || config.portfolioWebsites.length === 0) {
+      const hasOldWebsites = config.portfolioWebsites && config.portfolioWebsites.some(w => w.title === "Aura Finance" || w.title === "Velour Label" || w.title === "Synapse AI");
+      if (!config.portfolioWebsites || config.portfolioWebsites.length === 0 || hasOldWebsites) {
         // Init with default values
         config.portfolioWebsites = [...defaultWebsites];
         localStorage.setItem('youistic_site_config', JSON.stringify(config));

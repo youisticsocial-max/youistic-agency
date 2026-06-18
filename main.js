@@ -114,6 +114,23 @@ function applySavedConfig() {
       document.querySelector('.hero-sub').textContent = config.heroSub;
     }
     
+    // Auto-migrate portfolio websites if they contain the old defaults
+    if (config.portfolioWebsites && Array.isArray(config.portfolioWebsites)) {
+      const hasOldWebsites = config.portfolioWebsites.some(w => w.title === "Aura Finance" || w.title === "Velour Label" || w.title === "Synapse AI");
+      if (hasOldWebsites) {
+        config.portfolioWebsites = [
+          {
+            title: "LawYours",
+            domain: "lawyours.in",
+            tags: "Next.js, Vercel Analytics, Clarity",
+            image: "/media/lawyours_in.jpeg",
+            link: "https://lawyours.in"
+          }
+        ];
+        localStorage.setItem('youistic_site_config', JSON.stringify(config));
+      }
+    }
+
     // Websites Showcase dynamic injection
     if (config.portfolioWebsites && Array.isArray(config.portfolioWebsites)) {
       const grid = document.querySelector('.web-grid');
