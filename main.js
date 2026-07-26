@@ -632,19 +632,22 @@ if (contactForm) {
     initMultiStepForm();
   } else {
     // Handle standard contact.html quick message form
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      const nameEl = contactForm.querySelector('input[placeholder*="Connor"]') || contactForm.querySelector('input[type="text"]');
-      const emailEl = contactForm.querySelector('input[type="email"]');
-      const msgEl = contactForm.querySelector('textarea');
+      const formData = new FormData(contactForm);
+      const data = Object.fromEntries(formData.entries());
       
-      if (!nameEl || !emailEl || !msgEl) return;
+      if (!data.clientName || !data.clientEmail || !data.comment) return;
 
       const newQuickMessage = {
-        name: nameEl.value,
-        email: emailEl.value,
-        message: msgEl.value,
+        name: data.clientName,
+        email: data.clientEmail,
+        phone: data.clientPhone || "",
+        company: data.businessName || "",
+        service: data.service || "",
+        source: data.source || "",
+        message: data.comment,
         date: new Date().toLocaleDateString('en-US', {
           month: 'short',
           day: 'numeric',
@@ -654,10 +657,24 @@ if (contactForm) {
         })
       };
 
-      // Save to localStorage
-      const list = JSON.parse(localStorage.getItem('youistic_quick_inquiries') || '[]');
-      list.unshift(newQuickMessage);
-      localStorage.setItem('youistic_quick_inquiries', JSON.stringify(list));
+      // Send to API
+      try {
+        await fetch('/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: newQuickMessage.name,
+            email: newQuickMessage.email,
+            phone: newQuickMessage.phone,
+            company: newQuickMessage.company,
+            service: newQuickMessage.service,
+            source: newQuickMessage.source,
+            goal: newQuickMessage.message
+          })
+        });
+      } catch (err) {
+        console.error('Lead submission failed', err);
+      }
 
       const successMsg = document.getElementById('form-success');
       if (successMsg) {
@@ -1113,7 +1130,7 @@ function initMultiStepForm() {
   }
 
   // Form submission handler
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!validateStep(5)) return;
 
@@ -1173,10 +1190,16 @@ function initMultiStepForm() {
        }
     }
 
-    // Save to localStorage
-    const list = JSON.parse(localStorage.getItem('youistic_planner_inquiries') || '[]');
-    list.unshift(newInquiry);
-    localStorage.setItem('youistic_planner_inquiries', JSON.stringify(list));
+    // Send to API
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newInquiry)
+      });
+    } catch (err) {
+      console.error('Lead submission failed', err);
+    }
 
     // Render success receipt
     form.innerHTML = `
